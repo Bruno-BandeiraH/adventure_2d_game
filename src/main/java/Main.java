@@ -1,0 +1,20 @@
+import javax.swing.*;
+
+public class Main {
+    public static void main(String[] args) {
+
+        // basic window configuration
+        // We're using the JFrame library to create a canvas that we will use to show our game
+        // we can close it clicking in the exit option on the window.
+        // the window isn't resizable
+        // and its visible to us
+
+        JFrame window = new JFrame();
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.setTitle("Adventure");
+
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+    }
+}

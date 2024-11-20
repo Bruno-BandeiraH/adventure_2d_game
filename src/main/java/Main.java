@@ -14,6 +14,10 @@ public class Main {
         window.setResizable(false);
         window.setTitle("Adventure");
 
+        GamePanel gamePanel = new GamePanel();
+        window.add(gamePanel);
+        window.pack(); // will make this window size fit the preferred size and layouts of its subcomponents (gamePanel)
+
         window.setLocationRelativeTo(null);
         window.setVisible(true);
     }

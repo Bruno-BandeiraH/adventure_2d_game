@@ -23,6 +23,9 @@ public class Player extends Entity{
         screenX = gp.screenWidth/2 - (gp.tileSize/2);
         screenY = gp.screenHeight/2 - (gp.tileSize/2);
 
+        // this defines the area in the character's tile with we gonna add the colision logic
+        solidArea = new Rectangle(8,16, (gp.tileSize/2),(gp.tileSize/2));
+
         setDefalutValues();
         getPlayerImage();
     }
@@ -54,18 +57,21 @@ public class Player extends Entity{
 
         // this if prevents the player from move if he stay still
         if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
-            if(keyH.upPressed){
-                direction = "up";
-                worldY -= speed;
-            } else if (keyH.downPressed) {
-                direction = "down";
-                worldY += speed;
-            } else if (keyH.leftPressed) {
-                direction = "left";
-                worldX -= speed;
-            } else if (keyH.rightPressed) {
-                direction = "right";
-                worldX += speed;
+            if(keyH.upPressed){direction = "up";}
+            else if (keyH.downPressed) {direction = "down";}
+            else if (keyH.leftPressed) {direction = "left";}
+            else if (keyH.rightPressed) { direction = "right";}
+
+            collisionOn = false;
+            gp.collisionChecker.checkTileCollision(this);
+
+            if(collisionOn == false){
+                switch(direction){
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
             }
 
             // changes the image in every 10 frames

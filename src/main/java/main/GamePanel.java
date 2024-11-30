@@ -1,8 +1,10 @@
 package main;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
+import javax.management.remote.SubjectDelegationPermission;
 import javax.swing.*;
 import java.awt.*;
 
@@ -32,7 +34,10 @@ public class GamePanel extends JPanel implements Runnable{
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
     public CollisionChecker collisionChecker = new CollisionChecker(this);
+    public AssetSetter assetSetter = new AssetSetter(this);
     public Player player = new Player(this, keyH);
+    public SuperObject objectSlots[] = new SuperObject[10]; // 10 slots
+
 
     public GamePanel(){
         // set the size of this class
@@ -41,6 +46,11 @@ public class GamePanel extends JPanel implements Runnable{
         this.setDoubleBuffered(true); // all the drawing from this component will be done in a offscreen painting buffer. Improves game's rendering performance
         this.addKeyListener(keyH);
         this.setFocusable(true); // the game can be focused to receive key input
+    }
+
+    public void setupGame(){
+
+        assetSetter.setObject();
     }
 
     public void startGameThread(){
@@ -93,7 +103,17 @@ public class GamePanel extends JPanel implements Runnable{
 
         Graphics2D g2 = (Graphics2D)g; // this is a better class for better control in 2D games
 
+        // TILE
         tileManager.draw(g2);
+
+        // OBJECT
+        for(int i = 0; i < objectSlots.length; i++){
+            if(objectSlots[i] != null){
+                objectSlots[i].draw(g2, this);
+            }
+        }
+
+        // PLAYER
         player.draw(g2);
 
         g2.dispose(); // helps to release resources after drawing

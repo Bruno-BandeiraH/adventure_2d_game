@@ -12,9 +12,9 @@ public class Player extends Entity{
 
     GamePanel gp;
     KeyHandler keyH;
-
     public final int screenX;
     public final int screenY;
+    int hasKey = 0;
 
     public Player(GamePanel gp, KeyHandler keyH){
         this.gp = gp;
@@ -25,6 +25,9 @@ public class Player extends Entity{
 
         // this defines the area in the character's tile with we gonna add the colision logic
         solidArea = new Rectangle(8,16, (gp.tileSize/2),(gp.tileSize/2));
+
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
 
         setDefalutValues();
         getPlayerImage();
@@ -65,6 +68,9 @@ public class Player extends Entity{
             collisionOn = false;
             gp.collisionChecker.checkTileCollision(this);
 
+            int objIndex = gp.collisionChecker.checkObject(this, true);
+            pickUpObject(objIndex);
+
             if(collisionOn == false){
                 switch(direction){
                     case "up": worldY -= speed; break;
@@ -86,6 +92,30 @@ public class Player extends Entity{
             }
         }
     }
+
+    public void pickUpObject(int index){
+        if(index != 222){
+
+            String objectName = gp.objectSlots[index].name;
+
+            switch (objectName){
+                case "Key":
+                    hasKey++;
+                    gp.objectSlots[index] = null;
+                    break;
+                case "Door":
+                    if(hasKey > 0){
+                        gp.objectSlots[index] = null;
+                        hasKey--;
+                    }
+            }
+
+
+
+        }
+    }
+
+
     public void draw(Graphics2D g2){
 
         BufferedImage image = null;

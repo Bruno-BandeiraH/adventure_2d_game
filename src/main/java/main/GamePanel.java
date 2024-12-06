@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTileSize = 16; // 16x16 tile
     final int scale = 3;
 
-    public final int tileSize = originalTileSize * 3; // 48x48
+    public final int tileSize = originalTileSize * scale; // 48x48
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
     public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
@@ -25,18 +25,21 @@ public class GamePanel extends JPanel implements Runnable{
     // WORLD SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
-    public final int worldWidth = tileSize * maxWorldCol;
-    public final int worldHeight = tileSize * maxWorldRow;
 
     int FPS = 60;
 
+    // SYSTEM
     TileManager tileManager = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
+    Sound sound = new Sound();
     Thread gameThread;
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
+
+    // ENTITY AND OBJECTS
     public Player player = new Player(this, keyH);
     public SuperObject objectSlots[] = new SuperObject[10]; // 10 slots
+
 
 
     public GamePanel(){
@@ -51,6 +54,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void setupGame(){
 
         assetSetter.setObject();
+        playMusic(0);
     }
 
     public void startGameThread(){
@@ -92,23 +96,22 @@ public class GamePanel extends JPanel implements Runnable{
         }
     }
 
-
     public void update(){
         player.update();
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         // this Graphics class is like  a brush that will paint the game on the screen for us
         super.paintComponent(g);
 
-        Graphics2D g2 = (Graphics2D)g; // this is a better class for better control in 2D games
+        Graphics2D g2 = (Graphics2D) g; // this is a better class for better control in 2D games
 
         // TILE
         tileManager.draw(g2);
 
         // OBJECT
-        for(int i = 0; i < objectSlots.length; i++){
-            if(objectSlots[i] != null){
+        for (int i = 0; i < objectSlots.length; i++) {
+            if (objectSlots[i] != null) {
                 objectSlots[i].draw(g2, this);
             }
         }
@@ -117,5 +120,20 @@ public class GamePanel extends JPanel implements Runnable{
         player.draw(g2);
 
         g2.dispose(); // helps to release resources after drawing
+    }
+
+    public void playMusic(int i){
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
+    public void stopMusic(){
+        sound.stop();
+    }
+
+    public void playSoundEffect(int i){
+        sound.setFile(i);
+        sound.play();
     }
 }

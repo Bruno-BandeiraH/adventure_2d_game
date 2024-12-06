@@ -108,6 +108,11 @@ public class Player extends Entity{
                         gp.objectSlots[index] = null;
                         hasKey--;
                     }
+                    break;
+                case "Boots":
+                    speed += 2;
+                    gp.objectSlots[index] = null;
+                    break;
             }
 
 

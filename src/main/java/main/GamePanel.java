@@ -103,10 +103,15 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void paintComponent(Graphics g) {
-        // this Graphics class is like  a brush that will paint the game on the screen for us
-        super.paintComponent(g);
-
+        super.paintComponent(g); // this Graphics class is like  a brush that will paint the game on the screen for us
         Graphics2D g2 = (Graphics2D) g; // this is a better class for better control in 2D games
+
+        // DEBUG
+        long drawStart = 0;
+        if(keyH.checkDrawTime){
+            drawStart = System.nanoTime();
+        }
+
 
         // TILE
         tileManager.draw(g2);
@@ -123,6 +128,15 @@ public class GamePanel extends JPanel implements Runnable{
 
         // UI
         ui.draw(g2);
+
+        // DEBUG
+        if(keyH.checkDrawTime){
+            long drawEnd = System.nanoTime();
+            long passedTime = drawEnd - drawStart;
+            g2.setColor(Color.white);
+            g2.drawString("Draw time: " + passedTime, 10, 400);
+            System.out.println("Draw time: " + passedTime);
+        }
 
         g2.dispose(); // helps to release resources after drawing
     }

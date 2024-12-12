@@ -21,7 +21,7 @@ public class UI {
 
     public UI(GamePanel gp){
         this.gp = gp;
-        KeyObject key = new KeyObject();
+        KeyObject key = new KeyObject(gp);
         keyImage = key.image;
     }
 

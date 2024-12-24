@@ -4,7 +4,6 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-
         // basic window configuration
         // We're using the JFrame library to create a canvas that we will use to show our game
         // we can close it clicking in the exit option on the window.

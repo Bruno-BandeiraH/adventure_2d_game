@@ -4,25 +4,22 @@ import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
 
-import javax.management.remote.SubjectDelegationPermission;
 import javax.swing.*;
 import java.awt.*;
 
-// this class will work as a game screen
+// this class works as the game screen
 public class GamePanel extends JPanel implements Runnable{
-
 
     // SCREEN SETTINGS
     final int originalTileSize = 16; // 16x16 tile
-    final int scale = 3;
-
+    final int scale = 3; // scaling
     public final int tileSize = originalTileSize * scale; // 48x48
-    public final int maxScreenCol = 16;
-    public final int maxScreenRow = 12;
-    public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
-    public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
+    public final int maxTileCol = 16; // making a
+    public final int maxTileRow = 12; // 4:3 aspect ratio
+    public final int screenWidth = tileSize * maxTileCol; // 768 pixels
+    public final int screenHeight = tileSize * maxTileRow; // 576 pixels
 
-    // WORLD SETTINGS
+    // WORLD MAP SIZE SETTINGS
     public final int maxWorldCol = 50;
     public final int maxWorldRow = 50;
 
@@ -40,34 +37,30 @@ public class GamePanel extends JPanel implements Runnable{
 
     // ENTITY AND OBJECTS
     public Player player = new Player(this, keyH);
-    public SuperObject objectSlots[] = new SuperObject[10]; // 10 slots
+    public SuperObject[] objectSlots = new SuperObject[10]; // 10 slots
 
-    // GAME STATE
+    // GAME STATE (PLAY/PAUSE)
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
 
+    // METHODS
 
-
-    public GamePanel(){
-        // set the size of this class
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true); // all the drawing from this component will be done in a offscreen painting buffer. Improves game's rendering performance
-        this.addKeyListener(keyH);
+    public GamePanel() {
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight)); // setting the size of the game screen
+        this.setDoubleBuffered(true); // all the drawings from this component will be done in a offscreen painting buffer. Improves game's rendering performance
         this.setFocusable(true); // the game can be focused to receive key input
+        this.addKeyListener(keyH); // listening commands controls
     }
 
-    public void setupGame(){
-
-        assetSetter.setObject();
-        playMusic(0);
-        stopMusic();
+    public void setupGame() {
+        assetSetter.setObject(); // setting interactable objects in the map
+        playMusic(0); // playing the music theme
         gameState = playState;
     }
 
-    public void startGameThread(){
-        gameThread = new Thread(this); // passing this class to the thread.
+    public void startGameThread() {
+        gameThread = new Thread(this);
         gameThread.start();
     }
 
@@ -80,68 +73,53 @@ public class GamePanel extends JPanel implements Runnable{
         double nextDrawTime = System.nanoTime() + drawInterval;
 
         while(gameThread != null){
-            // 1  UPDATE: update information such as character positions
+            // 1  UPDATE: update information such as character positions, tiles, objects, npc's
             update();
-
             // 2 DRAW: draw the screen with the updated information
             repaint();
-
             try{
                 double remainingTime = nextDrawTime - System.nanoTime();
                 remainingTime = remainingTime/1000000;
-
                 if(remainingTime < 0){
                     remainingTime = 0;
                 }
-
                 Thread.sleep((long) remainingTime); // pause the game loop
-
                 nextDrawTime += drawInterval;
             } catch (InterruptedException e){
                 e.getMessage();
             }
-
-
         }
     }
 
-    public void update(){
-        if(gameState == playState){
+    public void update() {
+        if(gameState == playState)
             player.update();
-        }
-        if(gameState == pauseState){
-            // nothing
-        }
     }
 
     public void paintComponent(Graphics g) {
-        super.paintComponent(g); // this Graphics class is like  a brush that will paint the game on the screen for us
-        Graphics2D g2 = (Graphics2D) g; // this is a better class for better control in 2D games
+        super.paintComponent(g); // this Graphics class is like a brush that will paint the game on the screen for us
+        Graphics2D g2 = (Graphics2D) g; // this is a class for better control in 2D games
 
-        // DEBUG
+        // time stamp
         long drawStart = 0;
         if(keyH.checkDrawTime){
             drawStart = System.nanoTime();
         }
 
-
         // TILE
         tileManager.draw(g2);
 
         // OBJECT
-        for (int i = 0; i < objectSlots.length; i++) {
-            if (objectSlots[i] != null) {
+        for(int i = 0; i < objectSlots.length; i++) {
+            if(objectSlots[i] != null) {
                 objectSlots[i].draw(g2, this);
             }
         }
 
-        // PLAYER
         player.draw(g2);
-
-        // UI
         ui.draw(g2);
 
-        // DEBUG
+        // time stamp
         if(keyH.checkDrawTime){
             long drawEnd = System.nanoTime();
             long passedTime = drawEnd - drawStart;
@@ -149,21 +127,20 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("Draw time: " + passedTime, 10, 400);
             System.out.println("Draw time: " + passedTime);
         }
-
         g2.dispose(); // helps to release resources after drawing
     }
 
-    public void playMusic(int i){
+    public void playMusic(int i) {
         music.setFile(i);
         music.play();
         music.loop();
     }
 
-    public void stopMusic(){
+    public void stopMusic() {
         music.stop();
     }
 
-    public void playSoundEffect(int i){
+    public void playSoundEffect(int i) {
         soundEffect.setFile(i);
         soundEffect.play();
     }

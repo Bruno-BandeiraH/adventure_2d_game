@@ -103,8 +103,12 @@ public class Player extends Entity{
 
     public void interactNpc(int npcIndex) {
         if(npcIndex != 222) {
-            System.out.println("A lógica parece estar funcionando");
+            if(keyH.enterPressed) {
+                gp.gameState = gp.dialogueState;
+                gp.npc[npcIndex].speak();
+            }
         }
+        gp.keyH.enterPressed = false;
     }
 
     public void draw(Graphics2D g2){

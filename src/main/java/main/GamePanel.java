@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     // SYSTEM
     TileManager tileManager = new TileManager(this);
-    KeyHandler keyH = new KeyHandler(this);
+    public KeyHandler keyH = new KeyHandler(this);
     Sound music = new Sound();
     Sound soundEffect = new Sound();
     Thread gameThread;
@@ -41,10 +41,11 @@ public class GamePanel extends JPanel implements Runnable{
     public SuperObject[] objectSlots = new SuperObject[10]; // 10 slots
     public Entity[] npc = new Entity[10];
 
-    // GAME STATE (PLAY/PAUSE)
+    // GAME STATES
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialogueState = 3;
 
     // METHODS
 

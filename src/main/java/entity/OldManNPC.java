@@ -11,6 +11,7 @@ public class OldManNPC extends Entity{
         direction = "down";
         speed = 1;
         getOldManImage();
+        setDialogue();
     }
 
     public void getOldManImage(){
@@ -24,6 +25,13 @@ public class OldManNPC extends Entity{
         right2 = setup("/npc/oldman_right_2");
     }
 
+    public void setDialogue() {
+        dialogues[0] = "Oopa, meu querido. Tudo bem?";
+        dialogues[1] = "Então tu veio pra essa ilha pra lançar a \nbraba?";
+        dialogues[2] = "Eu era muito popular com as garotas,\nmas agora estou muito velho para\nnamorar.";
+        dialogues[3] = "Bom, espero que dê tudo certo para\nvocê, meu rapaz.";
+    }
+
     public void setAction() {
 
         animationIntervalCounter++;
@@ -33,15 +41,22 @@ public class OldManNPC extends Entity{
             int i = random.nextInt(100)+1; // 1 to 100
             if(i <= 25) {
                 direction = "up";
-            } else if (i > 25 && i <= 50) {
+            }
+            if (i > 25 && i <= 50) {
                 direction = "down";
-            } else if(i > 50 && i < 75) {
+            }
+            if(i > 50 && i <= 75) {
                 direction = "left";
-            } else if(i > 75) {
+            }
+            if(i > 75) {
                 direction = "right";
             }
             animationIntervalCounter = 0;
         }
-
     }
+
+    public void speak() {
+        super.speak();
+    }
+
 }

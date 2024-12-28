@@ -1,36 +1,33 @@
 package main;
 
-import object.KeyObject;
-
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.text.DecimalFormat;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class UI {
 
     GamePanel gp;
     Graphics2D g2;
-    Font arial_40 = new Font("Arial", Font.PLAIN, 40);
-    Font arial_80Bold = new Font("Arial", Font.BOLD, 80);
-    public boolean messageOn = false;
-    public String message = "";
-    int messageCounter = 0;
-    public boolean gameFinished = false;
+    Font maruMonica;
     public String currentDialogue = "";
 
-    public UI(GamePanel gp){
+    public UI(GamePanel gp) {
         this.gp = gp;
+
+        try {
+            InputStream is = getClass().getResourceAsStream("/font/x12y16pxMaruMonica.ttf");
+            maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
+        } catch (FontFormatException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void showMessage(String text){
-        message = text;
-        messageOn = true;
-    }
-
-    public void draw(Graphics2D g2){
+    public void draw(Graphics2D g2) {
 
         this.g2 = g2;
-        g2.setFont(arial_40);
+        g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
         // PLAY STATR
@@ -76,8 +73,8 @@ public class UI {
         g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
     }
 
-    public void drawPauseScreen(){
-        g2.setFont(arial_80Bold);
+    public void drawPauseScreen() {
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
         String text = "PAUSED";
         int x = getXForCenteredText(text);
         int y = gp.screenHeight/2;
@@ -87,7 +84,7 @@ public class UI {
 
     public int getXForCenteredText(String text){
         int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-        int x = (gp.screenWidth/2) - (length/2);
-        return x;
+        return ((gp.screenWidth/2) - (length/2));
+
     }
 }

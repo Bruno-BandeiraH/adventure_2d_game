@@ -10,6 +10,7 @@ public class UI {
     Graphics2D g2;
     Font maruMonica;
     public String currentDialogue = "";
+    public int commandNumber = 0;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -30,7 +31,11 @@ public class UI {
         g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
-        // PLAY STATR
+        // TITLE STATE
+        if(gp.gameState == gp.titleState) {
+            drawTitleScreen();
+        }
+        // PLAY STATE
         if(gp.gameState == gp.playState){
             // do playState stuff later
         }
@@ -60,6 +65,56 @@ public class UI {
             g2.drawString(line, x, y);
             y += 40;
         }
+    }
+
+    public void drawTitleScreen() {
+        g2.setColor(Color.black);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        // TITLE NAME
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 94F));
+        String title = "Blue Boy Adventure";
+        int x = getXForCenteredText(title);
+        int y = gp.screenHeight / 4;
+
+        // SHADOW
+        g2.setColor(Color.gray);
+        g2.drawString(title,x+5,y+5);
+
+        g2.setColor(Color.white); // of the font
+        g2.drawString(title, x ,y);
+
+        // BLUE BOY IMAGE
+        x = gp.screenWidth / 2 - (gp.tileSize*2)/2;
+        y = gp.tileSize * 4;
+        g2.drawImage(gp.player.down1, x, y, gp.tileSize*2, gp.tileSize*2, null);
+
+        // MENU
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 46F));
+        String text = "NOVO JOGO";
+        x = getXForCenteredText(text);
+        y += (int) (gp.tileSize * 3.5);
+        g2.drawString(text, x ,y);
+        if(commandNumber == 0) {
+            g2.drawString(">", x-gp.tileSize, y);
+        }
+
+        text = "CARREGAR JOGO";
+        x = getXForCenteredText(text);
+        y += gp.tileSize;
+        g2.drawString(text, x ,y);
+        if(commandNumber == 1) {
+            g2.drawString(">", x-gp.tileSize, y);
+        }
+
+        text = "SAIR";
+        x = getXForCenteredText(text);
+        y += gp.tileSize;
+        g2.drawString(text, x ,y);
+        if(commandNumber == 2) {
+            g2.drawString(">", x-gp.tileSize, y);
+        }
+
     }
 
     public void drawSubWindow(int x, int y, int width, int height) {

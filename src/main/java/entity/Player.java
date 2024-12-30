@@ -6,6 +6,7 @@ import main.KeyHandler;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+
 public class Player extends Entity{
 
     KeyHandler keyH;
@@ -71,6 +72,11 @@ public class Player extends Entity{
             int npcIndex = gp.collisionChecker.checkEntity(this, gp.npc);
             interactNpc(npcIndex);
 
+            // CHECK EVENT
+            gp.eventHandler.checkEvent();
+
+            gp.keyH.enterPressed = false;
+
             if(collisionOn == false){
                 switch(direction){
                     case "up": worldY -= speed; break;
@@ -112,7 +118,6 @@ public class Player extends Entity{
                 gp.npc[npcIndex].speak();
             }
         }
-        gp.keyH.enterPressed = false;
     }
 
     public void draw(Graphics2D g2){

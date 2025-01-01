@@ -1,28 +1,35 @@
 package object;
 
+import entity.Entity;
 import main.GamePanel;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
 
-public class HeartObject extends SuperObject{
+public class HeartObject extends Entity {
 
-    GamePanel gp;
-
+    private final BufferedImage fullHeart;
+    private final BufferedImage halfHeart;
+    private final BufferedImage blankHeart;
 
     public HeartObject(GamePanel gp){
-        this.gp = gp;
-        name = "Heart";
-        try{
-            image = ImageIO.read(getClass().getResourceAsStream("/objects/heart_full.png"));
-            image2 = ImageIO.read(getClass().getResourceAsStream("/objects/heart_half.png"));
-            image3 = ImageIO.read(getClass().getResourceAsStream("/objects/heart_blank.png"));
+        super(gp);
 
-            image = utilityTool.scaleImage(image, gp.tileSize, gp.tileSize);
-            image2 = utilityTool.scaleImage(image2, gp.tileSize, gp.tileSize);
-            image3 = utilityTool.scaleImage(image3, gp.tileSize, gp.tileSize);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        name = "Heart";
+        fullHeart = setup("/objects/heart_full");
+        halfHeart = setup("/objects/heart_half");
+        blankHeart = setup("/objects/heart_blank");
+    }
+
+
+    public BufferedImage getFullHeart() {
+        return fullHeart;
+    }
+
+    public BufferedImage getHalfHeart() {
+        return halfHeart;
+    }
+
+    public BufferedImage getBlankHeart() {
+        return blankHeart;
     }
 }

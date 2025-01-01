@@ -14,7 +14,7 @@ public class Entity {
     public int worldX, worldY;
     public int speed;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2; // Describes an image with an accessible buffer of image data. used to store image files.
-    public String direction;
+    public String direction = "down";
     public int spriteCounter = 0;
     public int spriteNumber = 1;
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48);
@@ -23,6 +23,8 @@ public class Entity {
     public int animationIntervalCounter = 0;
     String[] dialogues = new String[20];
     int dialogueIndex = 0;
+    public String name;
+    public boolean collision = false;
 
     // CHARACTER STATUS
     public int maxLife;

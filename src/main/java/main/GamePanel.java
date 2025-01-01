@@ -2,11 +2,11 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
 
 // this class works as the game screen
 public class GamePanel extends JPanel implements Runnable{
@@ -39,8 +39,9 @@ public class GamePanel extends JPanel implements Runnable{
 
     // ENTITY AND OBJECTS
     public Player player = new Player(this, keyH);
-    public SuperObject[] objectSlots = new SuperObject[10]; // 10 slots
+    public Entity[] objectSlots = new Entity[10]; // 10 slots
     public Entity[] npc = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
 
     // GAME STATES
     public int gameState;
@@ -123,19 +124,29 @@ public class GamePanel extends JPanel implements Runnable{
         } else {
             // TILE
             tileManager.draw(g2);
-            // OBJECT
-            for(int i = 0; i < objectSlots.length; i++) {
-                if(objectSlots[i] != null) {
-                    objectSlots[i].draw(g2, this);
-                }
+
+            // POPULATING ENTITY LIST
+
+            entityList.add(player); // PLAYER
+
+            Arrays.stream(npc) // NPC
+                .filter(Objects::nonNull)
+                    .forEach(entityList::add);
+
+            Arrays.stream(objectSlots) // OBJECTS
+                .filter(Objects::nonNull)
+                    .forEach(entityList::add);
+
+            entityList.sort(Comparator.comparingInt(e -> e.worldY));
+
+            // DRAW ENTITIES
+            for(Entity entity : entityList) {
+                entity.draw(g2);
             }
-            // NPC
-            for(int i = 0; i < npc.length; i++){
-                if(npc[i] != null) {
-                    npc[i].draw(g2);
-                }
-            }
-            player.draw(g2);
+            // CLEAR LIST FOR THE NEXT FRAME
+            entityList.clear();
+
+            // UI
             ui.draw(g2);
         }
 

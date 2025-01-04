@@ -41,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Player player = new Player(this, keyH);
     public Entity[] objectSlots = new Entity[10]; // 10 slots
     public Entity[] npc = new Entity[10];
+    public Entity[] monsters = new Entity[20];
     ArrayList<Entity> entityList = new ArrayList<>();
 
     // GAME STATES
@@ -60,9 +61,9 @@ public class GamePanel extends JPanel implements Runnable{
     }
 
     public void setupGame() {
-        assetSetter.setObject(); // setting interactable objects in the map
+        assetSetter.setObject();
         assetSetter.setNpc();
-        // playMusic(0); // playing the music theme
+        assetSetter.setMonsters();
         gameState = titleState;
     }
 
@@ -101,11 +102,12 @@ public class GamePanel extends JPanel implements Runnable{
     public void update() {
         if(gameState == playState)
             player.update();
-        for(int i = 0; i < npc.length; i++) {
-            if(npc[i] != null) {
-                npc[i].update();
-            }
-        }
+        Arrays.stream(npc)
+            .filter(Objects::nonNull)
+            .forEach(Entity::update);
+        Arrays.stream(monsters)
+            .filter(Objects::nonNull)
+            .forEach(Entity::update);
     }
 
     public void paintComponent(Graphics g) {
@@ -136,6 +138,10 @@ public class GamePanel extends JPanel implements Runnable{
             Arrays.stream(objectSlots) // OBJECTS
                 .filter(Objects::nonNull)
                     .forEach(entityList::add);
+
+            Arrays.stream(monsters)
+                    .filter(Objects::nonNull)
+                .forEach(entityList::add);
 
             entityList.sort(Comparator.comparingInt(e -> e.worldY));
 

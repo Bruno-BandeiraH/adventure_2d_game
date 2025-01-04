@@ -41,7 +41,6 @@ public class KeyHandler implements KeyListener {
                 switch (gp.ui.commandNumber) {
                     case 0:
                         gp.gameState = gp.playState;
-                        gp.playMusic(0);
                         break;
                     case 2:
                         System.exit(0);

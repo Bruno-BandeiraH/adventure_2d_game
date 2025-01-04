@@ -25,6 +25,11 @@ public class Entity {
     int dialogueIndex = 0;
     public String name;
     public boolean collision = false;
+    public boolean invincible = false;
+    public int invincibleCounter = 0;
+    public int typeOfEntity; // 0 = player, 1 = NPC, 2 = monster
+
+
 
     // CHARACTER STATUS
     public int maxLife;
@@ -64,7 +69,16 @@ public class Entity {
         collisionOn = false;
         gp.collisionChecker.checkTileCollision(this);
         gp.collisionChecker.checkObject(this, false);
-        gp.collisionChecker.checkPlayer(this);
+        gp.collisionChecker.checkEntity(this, gp.npc);
+        gp.collisionChecker.checkEntity(this, gp.monsters);
+        boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
+
+        if(this.typeOfEntity == 2 && contactPlayer) {
+            if(!gp.player.invincible) {
+                gp.player.currentLife--;
+                gp.player.invincible = true;
+            }
+        }
 
         if(!collisionOn){
             switch(direction){

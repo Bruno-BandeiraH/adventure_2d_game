@@ -72,6 +72,10 @@ public class Player extends Entity{
             int npcIndex = gp.collisionChecker.checkEntity(this, gp.npc);
             interactNpc(npcIndex);
 
+            // check monster collision
+            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
+            contactMonster(monsterIndex);
+
             // CHECK EVENT
             gp.eventHandler.checkEvent();
 
@@ -103,6 +107,14 @@ public class Player extends Entity{
                 standCounter = 0;
             }
         }
+
+        if (invincible) {
+            invincibleCounter++;
+            if(invincibleCounter > 60) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     public void pickUpObject(int index){
@@ -117,6 +129,16 @@ public class Player extends Entity{
                 gp.gameState = gp.dialogueState;
                 gp.npc[npcIndex].speak();
             }
+        }
+    }
+
+    public void contactMonster(int monsterIndex) {
+        if(monsterIndex != 222) {
+            if(!invincible) {
+                currentLife--;
+                invincible = true;
+            }
+
         }
     }
 
@@ -155,6 +177,12 @@ public class Player extends Entity{
                 }
                 break;
         }
+        if(invincible) {
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)); // set opacity level.
+        }
         g2.drawImage(image, screenX, screenY, null);
+
+        // reset alpha
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 }

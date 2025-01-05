@@ -151,6 +151,7 @@ public class Player extends Entity{
                 gp.gameState = gp.dialogueState;
                 gp.npc[npcIndex].speak();
             } else {
+                gp.playSoundEffect(7);
                 attacking = true;
             }
         }
@@ -159,6 +160,7 @@ public class Player extends Entity{
     public void contactMonster(int monsterIndex) {
         if(monsterIndex != 222) {
             if(!invincible) {
+                gp.playSoundEffect(6);
                 currentLife--;
                 invincible = true;
             }
@@ -169,11 +171,13 @@ public class Player extends Entity{
     public void damageMonster(int monsterIndex) {
         if(monsterIndex != 222) {
             if(!gp.monsters[monsterIndex].invincible) {
+                gp.playSoundEffect(5);
                 gp.monsters[monsterIndex].currentLife--;
                 gp.monsters[monsterIndex].invincible = true;
+                gp.monsters[monsterIndex].damageReaction();
 
                 if(gp.monsters[monsterIndex].currentLife <= 0) {
-                    gp.monsters[monsterIndex] = null;
+                    gp.monsters[monsterIndex].dying = true;
                 }
             }
         }
@@ -198,8 +202,8 @@ public class Player extends Entity{
             switch (direction) {
                 case "up": worldY -= attackArea.height; break;
                 case "down": worldY += attackArea.height; break;
-                case "left": worldY -= attackArea.width; break;
-                case "right": worldY += attackArea.width; break;
+                case "left": worldX -= attackArea.width; break;
+                case "right": worldX += attackArea.width; break;
             }
 
             // AttackArea becomes solidArea

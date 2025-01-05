@@ -7,8 +7,11 @@ import java.util.Random;
 
 public class GreenSlime extends Entity {
 
+    GamePanel gp;
+
     public GreenSlime(GamePanel gp) {
         super(gp);
+        this.gp = gp;
         name = "Green Slime";
         speed = 1;
         maxLife = 4;
@@ -57,5 +60,10 @@ public class GreenSlime extends Entity {
             }
             animationIntervalCounter = 0;
         }
+    }
+
+    public void damageReaction() {
+        animationIntervalCounter = 0;
+        direction = gp.player.direction;
     }
 }

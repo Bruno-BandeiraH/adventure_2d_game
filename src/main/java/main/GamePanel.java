@@ -7,6 +7,7 @@ import tile.TileManager;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.stream.IntStream;
 
 // this class works as the game screen
 public class GamePanel extends JPanel implements Runnable{
@@ -105,9 +106,36 @@ public class GamePanel extends JPanel implements Runnable{
         Arrays.stream(npc)
             .filter(Objects::nonNull)
             .forEach(Entity::update);
-        Arrays.stream(monsters)
-            .filter(Objects::nonNull)
-            .forEach(Entity::update);
+
+        IntStream.range(0, monsters.length)
+            .forEach(i -> {
+                Entity monster = monsters[i];
+                if(monster != null) {
+                    if(monster.alive && !monster.dying) {
+                        monster.update();
+                    }
+                    if(!monster.alive) {
+                        monsters[i] = null;
+                    }
+                }
+            });
+
+
+//        Arrays.stream(monsters)
+//            .filter(Objects::nonNull)
+//            .filter(Entity::isAlive)
+//            .forEach(Entity::update);
+
+//        for(int i = 0; i < monsters.length; i++) {
+//            if(monsters[i] != null) {
+//                if(monsters[i].alive && !monsters[i].dying) {
+//                    monsters[i].update();
+//                }
+//                if(!monsters[i].alive) {
+//                    monsters[i] = null;
+//                }
+//            }
+//        }
     }
 
     public void paintComponent(Graphics g) {

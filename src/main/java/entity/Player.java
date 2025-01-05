@@ -56,7 +56,7 @@ public class Player extends Entity{
     public void update(){
 
         // this if prevents the player from move if he stay still
-        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
+        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.enterPressed){
             if(keyH.upPressed){direction = "up";}
             else if (keyH.downPressed) {direction = "down";}
             else if (keyH.leftPressed) {direction = "left";}

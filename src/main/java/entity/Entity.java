@@ -28,6 +28,9 @@ public class Entity {
     public boolean invincible = false;
     public int invincibleCounter = 0;
     public int typeOfEntity; // 0 = player, 1 = NPC, 2 = monster
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
+    public boolean attacking = false;
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
 
 
 
@@ -98,6 +101,14 @@ public class Entity {
             }
             spriteCounter = 0;
         }
+
+        if (invincible) {
+            invincibleCounter++;
+            if(invincibleCounter > 40) {
+                invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
 
     public BufferedImage setup(String imagePath) {
@@ -106,8 +117,21 @@ public class Entity {
 
         try{
             image = ImageIO.read(getClass().getResourceAsStream( imagePath + ".png"));
-            image = utilityTool.scaleImage(image, gp.tileSize, gp.tileSize);
-        } catch(IOException e){
+
+            // CHECK IF WIDTH OR HEIGHT ITS EQUAL 16. IF NOT, IT MEANS IT IS 32
+            if(image.getWidth() == gp.originalTileSize){
+                if(image.getHeight() == gp.originalTileSize) {
+                    image = utilityTool.scaleImage(image, gp.tileSize, gp.tileSize);
+                }
+                else {
+                    image = utilityTool.scaleImage(image, gp.tileSize, gp.tileSize*2);
+                }
+            }
+            else {
+                image = utilityTool.scaleImage(image, gp.tileSize*2, gp.tileSize);
+            }
+
+        } catch(IOException e) {
             e.printStackTrace();
         }
         return image;
@@ -126,35 +150,26 @@ public class Entity {
 
             switch (direction) {
                 case "up":
-                    if(spriteNumber == 1){
-                        image = up1;
-                    } else{
-                        image = up2;
-                    }
+                    if(spriteNumber == 1) {image = up1;} else {image = up2;}
                     break;
                 case "down":
-                    if(spriteNumber == 1){
-                        image = down1;
-                    } else{
-                        image = down2;
-                    }
+                    if(spriteNumber == 1) {image = down1;} else {image = down2;}
                     break;
                 case "left":
-                    if(spriteNumber == 1){
-                        image = left1;
-                    } else{
-                        image = left2;
-                    }
+                    if(spriteNumber == 1) {image = left1;} else {image = left2;}
                     break;
                 case "right":
-                    if(spriteNumber == 1){
-                        image = right1;
-                    } else{
-                        image = right2;
-                    }
+                    if(spriteNumber == 1) {image = right1;} else {image = right2;}
                     break;
             }
+
+            if(invincible) {
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f)); // set opacity level.
+            }
+
             g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }
 

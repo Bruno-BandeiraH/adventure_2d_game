@@ -27,8 +27,13 @@ public class Player extends Entity{
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
+        attackArea.width = 36;
+        attackArea.height = 36;
+
+
         setDefalutValues();
         getPlayerImage();
+        getPlayerAttackImage();
     }
 
     public void setDefalutValues(){
@@ -53,10 +58,25 @@ public class Player extends Entity{
             right2 = setup("/player/boy_right_2");
     }
 
+    public void getPlayerAttackImage() {
+        attackUp1 = setup("/player/boy_attack_up_1");
+        attackUp2 = setup("/player/boy_attack_up_2");
+        attackDown1 = setup("/player/boy_attack_down_1");
+        attackDown2 = setup("/player/boy_attack_down_2");
+        attackLeft1 = setup("/player/boy_attack_left_1");
+        attackLeft2 = setup("/player/boy_attack_left_2");
+        attackRight1 = setup("/player/boy_attack_right_1");
+        attackRight2 = setup("/player/boy_attack_right_2");
+    }
+
     public void update(){
 
-        // this if prevents the player from move if he stay still
-        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.enterPressed){
+        if(attacking) {
+            attackAnimation();
+
+        } else if(keyH.upPressed || keyH.downPressed || keyH.leftPressed
+            || keyH.rightPressed || keyH.enterPressed) {
+
             if(keyH.upPressed){direction = "up";}
             else if (keyH.downPressed) {direction = "down";}
             else if (keyH.leftPressed) {direction = "left";}
@@ -79,9 +99,9 @@ public class Player extends Entity{
             // CHECK EVENT
             gp.eventHandler.checkEvent();
 
-            gp.keyH.enterPressed = false;
 
-            if(collisionOn == false){
+
+            if(!collisionOn && !keyH.enterPressed){
                 switch(direction){
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
@@ -89,6 +109,8 @@ public class Player extends Entity{
                     case "right": worldX += speed; break;
                 }
             }
+
+            gp.keyH.enterPressed = false;
 
             // changes the image in every 10 frames
             spriteCounter++;
@@ -124,10 +146,12 @@ public class Player extends Entity{
     }
 
     public void interactNpc(int npcIndex) {
-        if(npcIndex != 222) {
-            if(keyH.enterPressed) {
+        if(keyH.enterPressed){
+            if(npcIndex != 222) {
                 gp.gameState = gp.dialogueState;
                 gp.npc[npcIndex].speak();
+            } else {
+                attacking = true;
             }
         }
     }
@@ -142,45 +166,106 @@ public class Player extends Entity{
         }
     }
 
+    public void damageMonster(int monsterIndex) {
+        if(monsterIndex != 222) {
+            if(!gp.monsters[monsterIndex].invincible) {
+                gp.monsters[monsterIndex].currentLife--;
+                gp.monsters[monsterIndex].invincible = true;
+
+                if(gp.monsters[monsterIndex].currentLife <= 0) {
+                    gp.monsters[monsterIndex] = null;
+                }
+            }
+        }
+    }
+
+    public void attackAnimation() {
+        spriteCounter++;
+
+        if(spriteCounter <= 5) {
+            spriteNumber = 1;
+        }
+        if(spriteCounter > 5 && spriteCounter <= 25) {
+            spriteNumber = 2;
+
+            // Save current worldX, worldY and solidArea
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int currentSolidAreaWidth = solidArea.width;
+            int currentSolidAreaHeight = solidArea.height;
+
+            // Adjust player's collision to the weapon (attackArea)
+            switch (direction) {
+                case "up": worldY -= attackArea.height; break;
+                case "down": worldY += attackArea.height; break;
+                case "left": worldY -= attackArea.width; break;
+                case "right": worldY += attackArea.width; break;
+            }
+
+            // AttackArea becomes solidArea
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+
+            // Check monster collision with updated worldX, worldY and solidArea
+            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
+            damageMonster(monsterIndex);
+
+            // restoring the position and collision values
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.height = currentSolidAreaHeight;
+            solidArea.width = currentSolidAreaWidth;
+        }
+        if(spriteCounter > 25) {
+            spriteNumber = 1;
+            spriteCounter = 0;
+            attacking = false;
+        }
+    }
+
     public void draw(Graphics2D g2){
 
         BufferedImage image = null;
+        int tempScreenX = screenX;
+        int tempScreenY = screenY;
 
         // sprite changer
         switch (direction){
             case "up":
-                if(spriteNumber == 1){
-                    image = up1;
-                } else{
-                    image = up2;
+                if(!attacking) {
+                if(spriteNumber == 1) {image = up1;} else {image = up2;}
+                } else {
+                    tempScreenY = screenY - gp.tileSize;
+                    if(spriteNumber == 1) {image = attackUp1;} else {image = attackUp2;}
                 }
                 break;
             case "down":
-                if(spriteNumber == 1){
-                    image = down1;
-                } else{
-                    image = down2;
+                if (!attacking) {
+                    if(spriteNumber == 1) {image = down1;} else {image = down2;}
+                } else {
+                    if(spriteNumber == 1) {image = attackDown1;} else {image = attackDown2;}
                 }
                 break;
             case "left":
-                if(spriteNumber == 1){
-                    image = left1;
-                } else{
-                    image = left2;
+                if (!attacking) {
+                    if(spriteNumber == 1) {image = left1;} else {image = left2;}
+                } else {
+                    tempScreenX = screenX - gp.tileSize;
+                    if(spriteNumber == 1) {image = attackLeft1;} else {image = attackLeft2;}
                 }
                 break;
             case "right":
-                if(spriteNumber == 1){
-                    image = right1;
-                } else{
-                    image = right2;
+                if(!attacking) {
+                    if(spriteNumber == 1) {image = right1;} else {image = right2;}
+                } else {
+                    if(spriteNumber == 1) {image = attackRight1;} else {image = attackRight2;}
                 }
                 break;
         }
         if(invincible) {
             g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)); // set opacity level.
         }
-        g2.drawImage(image, screenX, screenY, null);
+        g2.drawImage(image, tempScreenX, tempScreenY, null);
 
         // reset alpha
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));

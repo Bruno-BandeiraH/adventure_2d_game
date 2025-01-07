@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialogueState = 3;
+    public final int characterState = 4;
 
     // METHODS
 
@@ -119,23 +120,6 @@ public class GamePanel extends JPanel implements Runnable{
                     }
                 }
             });
-
-
-//        Arrays.stream(monsters)
-//            .filter(Objects::nonNull)
-//            .filter(Entity::isAlive)
-//            .forEach(Entity::update);
-
-//        for(int i = 0; i < monsters.length; i++) {
-//            if(monsters[i] != null) {
-//                if(monsters[i].alive && !monsters[i].dying) {
-//                    monsters[i].update();
-//                }
-//                if(!monsters[i].alive) {
-//                    monsters[i] = null;
-//                }
-//            }
-//        }
     }
 
     public void paintComponent(Graphics g) {

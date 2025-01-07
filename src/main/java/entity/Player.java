@@ -2,6 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.ShieldObject;
+import object.SwordObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,6 +15,7 @@ public class Player extends Entity{
     public final int screenX;
     public final int screenY;
     int standCounter = 0;
+    public boolean attackCanceled = false;
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp); // calling the constructo of the super class
@@ -45,7 +48,26 @@ public class Player extends Entity{
         // PLAYER STATUS
         maxLife = 6;
         currentLife = maxLife;
+        level = 1;
+        strength = 1;
+        dexterity = 1;
+        exp = 0;
+        nextLevelExp = 5;
+        coin = 0;
+        currentWeapon = new SwordObject(gp);
+        currentShield = new ShieldObject(gp);
+        attack = getAttack();
+        defense = getDefense();
     }
+
+    public int getAttack() {
+        return strength * currentWeapon.attackValue;
+    }
+
+    public int getDefense() {
+        return dexterity * currentShield.defenseValue;
+    }
+
 
     public void getPlayerImage(){
             up1 = setup("/player/boy_up_1");
@@ -99,8 +121,6 @@ public class Player extends Entity{
             // CHECK EVENT
             gp.eventHandler.checkEvent();
 
-
-
             if(!collisionOn && !keyH.enterPressed){
                 switch(direction){
                     case "up": worldY -= speed; break;
@@ -110,6 +130,14 @@ public class Player extends Entity{
                 }
             }
 
+            if
+            (keyH.enterPressed && !attackCanceled) {
+                gp.playSoundEffect(6);
+                attacking = true;
+                spriteCounter = 0;
+            }
+
+            attackCanceled = false;
             gp.keyH.enterPressed = false;
 
             // changes the image in every 10 frames
@@ -148,11 +176,9 @@ public class Player extends Entity{
     public void interactNpc(int npcIndex) {
         if(keyH.enterPressed){
             if(npcIndex != 222) {
+                attackCanceled = true;
                 gp.gameState = gp.dialogueState;
                 gp.npc[npcIndex].speak();
-            } else {
-                gp.playSoundEffect(7);
-                attacking = true;
             }
         }
     }

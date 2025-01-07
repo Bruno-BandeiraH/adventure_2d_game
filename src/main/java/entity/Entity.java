@@ -37,6 +37,23 @@ public class Entity {
     boolean hpBarOn = false;
     int hpBarCounter = 0;
 
+    public int level;
+    public int strength;
+    public int dexterity;
+    public int attack;
+    public int defense;
+    public int exp;
+    public int nextLevelExp;
+    public int coin;
+    public Entity currentWeapon;
+    public Entity currentShield;
+
+
+    public int attackValue;
+    public int defenseValue;
+
+
+
     public boolean isAlive() {
         return alive;
     }

@@ -187,7 +187,11 @@ public class Player extends Entity{
         if(monsterIndex != 222) {
             if(!invincible) {
                 gp.playSoundEffect(6);
-                currentLife--;
+                int damage = gp.monsters[monsterIndex].attack - defense;
+                if(damage < 0) {
+                    damage = 0;
+                }
+                currentLife -= damage;
                 invincible = true;
             }
 
@@ -198,17 +202,42 @@ public class Player extends Entity{
         if(monsterIndex != 222) {
             if(!gp.monsters[monsterIndex].invincible) {
                 gp.playSoundEffect(5);
-                gp.monsters[monsterIndex].currentLife--;
+
+                int damage = attack -  gp.monsters[monsterIndex].defense;
+                if(damage < 0) {
+                    damage = 0;
+                }
+                gp.monsters[monsterIndex].currentLife -= damage;
+                gp.ui.addMessage(damage + "damage!");
                 gp.monsters[monsterIndex].invincible = true;
                 gp.monsters[monsterIndex].damageReaction();
 
                 if(gp.monsters[monsterIndex].currentLife <= 0) {
                     gp.monsters[monsterIndex].dying = true;
+                    gp.ui.addMessage(gp.monsters[monsterIndex].name + " killed");
+                    exp += gp.monsters[monsterIndex].exp;
+                    gp.ui.addMessage("Exp + " + gp.monsters[monsterIndex].exp);
+                    checkLevelUp();
                 }
             }
         }
     }
 
+
+    public void checkLevelUp() {
+        if(exp >= nextLevelExp) {
+            gp.playSoundEffect(8);
+            level++;
+            nextLevelExp *= 2;
+            maxLife += 2;
+            strength++;
+            dexterity++;
+            attack = getAttack();
+            defense = getDefense();
+            gp.gameState = gp.dialogueState;
+            gp.ui.currentDialogue = "Leveled Up!";
+        }
+    }
     public void attackAnimation() {
         spriteCounter++;
 

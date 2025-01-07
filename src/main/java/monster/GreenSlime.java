@@ -17,6 +17,9 @@ public class GreenSlime extends Entity {
         maxLife = 4;
         currentLife = maxLife;
         typeOfEntity = 2;
+        attack = 5;
+        defense = 0;
+        exp = 3;
 
         solidArea.x = 3;
         solidArea.y = 10;

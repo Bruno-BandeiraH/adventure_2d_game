@@ -107,7 +107,12 @@ public class Entity {
         if(this.typeOfEntity == 2 && contactPlayer) {
             if(!gp.player.invincible) {
                 gp.playSoundEffect(6);
-                gp.player.currentLife--;
+
+                int damage = attack - gp.player.defense;
+                if(damage < 0) {
+                    damage = 0;
+                }
+                gp.player.currentLife -= damage;
                 gp.player.invincible = true;
             }
         }

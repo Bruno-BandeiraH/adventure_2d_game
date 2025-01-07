@@ -81,6 +81,7 @@ public class EventHandler {
             gp.ui.currentDialogue = "A água não tá gelada, mas pelo menos tá limpa.\n" +
                 "você sente seu corpo se recuperar";
             gp.player.currentLife = gp.player.maxLife;
+            gp.assetSetter.setMonsters();
         }
     }
 }

@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class UI {
 
@@ -15,6 +16,8 @@ public class UI {
     Font maruMonica;
     public String currentDialogue = "";
     public int commandNumber = 0;
+    ArrayList<String> messages = new ArrayList<>();
+    ArrayList<Integer> messageCounter = new ArrayList<>();
     BufferedImage heart_full, heart_half, heart_blank;
 
     public UI(GamePanel gp) {
@@ -49,8 +52,8 @@ public class UI {
         }
         // PLAY STATE
         if(gp.gameState == gp.playState){
-            // do playState stuff later
             drawPlayerLifeBar();
+            drawMessage();
         }
         // PAUSE STATE
         if(gp.gameState == gp.pauseState) {
@@ -67,6 +70,11 @@ public class UI {
         if(gp.gameState == gp.characterState) {
             drawCharacterStatusScreen();
         }
+    }
+
+    public void addMessage(String message) {
+        messages.add(message);
+        messageCounter.add(0);
     }
 
     public void drawDialogueScreen() {
@@ -181,6 +189,28 @@ public class UI {
         g2.drawImage(gp.player.currentWeapon.down1, tailX - gp.tileSize, textY-14, null);
         textY += gp.tileSize;
         g2.drawImage(gp.player.currentShield.down1, tailX - gp.tileSize, textY-14, null);
+    }
+
+    public void drawMessage() {
+        int messageX = gp.tileSize;
+        int messageY = gp.tileSize * 4;
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 26));
+
+        for(int i = 0; i < messages.size(); i++) {
+            if(messages.get(i) != null) {
+                g2.setColor(Color.black);
+                g2.drawString(messages.get(i), messageX+2, messageY+2);
+                g2.setColor(Color.white);
+                g2.drawString(messages.get(i), messageX, messageY);
+                int counter = messageCounter.get(i) + 1;
+                messageCounter.set(i, counter);
+                messageY += 50;
+                if(messageCounter.get(i) > 180) {
+                    messages.remove(i);
+                    messageCounter.remove(i);
+                }
+            }
+        }
     }
 
     public void drawTitleScreen() {

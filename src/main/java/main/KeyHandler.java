@@ -7,7 +7,7 @@ public class KeyHandler implements KeyListener {
 
     GamePanel gp;
     public boolean upPressed, downPressed, rightPressed, leftPressed, enterPressed;
-    public boolean checkDrawTime;
+    public boolean showDebugText;
 
     public KeyHandler(GamePanel gp){
         this.gp = gp;
@@ -90,10 +90,10 @@ public class KeyHandler implements KeyListener {
 
         // TIMER
         if (code == KeyEvent.VK_T) {
-            if (!checkDrawTime) {
-                checkDrawTime = true;
-            } else if (checkDrawTime) {
-                checkDrawTime = false;
+            if (!showDebugText) {
+                showDebugText = true;
+            } else if (showDebugText) {
+                showDebugText = false;
             }
         }
     }

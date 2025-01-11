@@ -10,5 +10,6 @@ public class KeyObject extends Entity {
 
         name = "Key";
         down1 = setup("/objects/key");
+        description = "[" + name + "]\n Opens a door";
     }
 }

@@ -36,6 +36,7 @@ public class Entity {
     int dyingCounter = 0;
     boolean hpBarOn = false;
     int hpBarCounter = 0;
+    public String description = "";
 
     public int level;
     public int strength;

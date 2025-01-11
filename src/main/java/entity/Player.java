@@ -2,11 +2,13 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.KeyObject;
 import object.ShieldObject;
 import object.SwordObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 
 public class Player extends Entity{
@@ -16,6 +18,8 @@ public class Player extends Entity{
     public final int screenY;
     int standCounter = 0;
     public boolean attackCanceled = false;
+    public ArrayList<Entity> inventory = new ArrayList<>();
+    public final int maxInventorySize = 20;
 
     public Player(GamePanel gp, KeyHandler keyH){
         super(gp); // calling the constructo of the super class
@@ -37,6 +41,7 @@ public class Player extends Entity{
         setDefalutValues();
         getPlayerImage();
         getPlayerAttackImage();
+        setItems();
     }
 
     public void setDefalutValues(){
@@ -238,6 +243,13 @@ public class Player extends Entity{
             gp.ui.currentDialogue = "Leveled Up!";
         }
     }
+
+    public void setItems() {
+        inventory.add(currentWeapon);
+        inventory.add(currentShield);
+        inventory.add(new KeyObject(gp));
+    }
+
     public void attackAnimation() {
         spriteCounter++;
 

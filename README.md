@@ -3,7 +3,7 @@
 
 This project is a 2D game built with java, following the [playlist](https://www.youtube.com/playlist?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq) on Youtube created by Ryi Snow.
 
-After completing the tutorial, i'm gonna refactor all the code, applaying Object-Oriented Programming principles and clean code practices. I'll also replace the sprites and sounds so i can publish the game.
+After completing the tutorial, i'm gonna refactor all the code, applying Object-Oriented Programming principles and clean code practices. I'll also replace the sprites and sounds so i can publish the game.
 
 ## Goals with this project
 - Understand key concepts of game development;

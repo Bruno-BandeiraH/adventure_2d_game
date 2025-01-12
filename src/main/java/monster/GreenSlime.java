@@ -16,7 +16,7 @@ public class GreenSlime extends Entity {
         speed = 1;
         maxLife = 4;
         currentLife = maxLife;
-        typeOfEntity = 2;
+        typeOfEntity = TYPE_MONSTER;
         attack = 5;
         defense = 0;
         exp = 3;

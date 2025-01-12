@@ -28,6 +28,13 @@ public class Entity {
     public boolean invincible = false;
     public int invincibleCounter = 0;
     public int typeOfEntity; // 0 = player, 1 = NPC, 2 = monster
+    public final int TYPE_PLAYER = 0;
+    public final int TYPE_NPCR = 1;
+    public final int TYPE_MONSTER = 2;
+    public final int TYPE_SWORD = 3;
+    public final int TYPE_AXE = 4;
+    public final int TYPE_SHIELD = 5;
+    public final int TYPE_CONSUMABLE = 6;
     public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public boolean attacking = false;
     public Rectangle attackArea = new Rectangle(0,0,0,0);
@@ -105,7 +112,7 @@ public class Entity {
         gp.collisionChecker.checkEntity(this, gp.monsters);
         boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
 
-        if(this.typeOfEntity == 2 && contactPlayer) {
+        if(this.typeOfEntity == TYPE_MONSTER && contactPlayer) {
             if(!gp.player.invincible) {
                 gp.playSoundEffect(6);
 
@@ -171,6 +178,8 @@ public class Entity {
         }
         return image;
     }
+
+    public void use(Entity entity){}
 
     public void draw(Graphics2D g2) {
 

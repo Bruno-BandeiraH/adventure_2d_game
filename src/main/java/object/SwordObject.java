@@ -11,6 +11,8 @@ public class SwordObject extends Entity {
         down1 = setup("/objects/sword_normal");
         attackValue = 1;
         description = "[" + name + "]\n An commom sword";
-
+        attackArea.width = 36;
+        attackArea.height = 36;
+        typeOfEntity = TYPE_SWORD;
     }
 }

@@ -34,10 +34,6 @@ public class Player extends Entity{
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
-        attackArea.width = 36;
-        attackArea.height = 36;
-
-
         setDefalutValues();
         getPlayerImage();
         getPlayerAttackImage();
@@ -66,6 +62,7 @@ public class Player extends Entity{
     }
 
     public int getAttack() {
+        attackArea = currentWeapon.attackArea;
         return strength * currentWeapon.attackValue;
     }
 
@@ -86,14 +83,26 @@ public class Player extends Entity{
     }
 
     public void getPlayerAttackImage() {
-        attackUp1 = setup("/player/boy_attack_up_1");
-        attackUp2 = setup("/player/boy_attack_up_2");
-        attackDown1 = setup("/player/boy_attack_down_1");
-        attackDown2 = setup("/player/boy_attack_down_2");
-        attackLeft1 = setup("/player/boy_attack_left_1");
-        attackLeft2 = setup("/player/boy_attack_left_2");
-        attackRight1 = setup("/player/boy_attack_right_1");
-        attackRight2 = setup("/player/boy_attack_right_2");
+        if(currentWeapon.typeOfEntity == TYPE_SWORD) {
+            attackUp1 = setup("/player/boy_attack_up_1");
+            attackUp2 = setup("/player/boy_attack_up_2");
+            attackDown1 = setup("/player/boy_attack_down_1");
+            attackDown2 = setup("/player/boy_attack_down_2");
+            attackLeft1 = setup("/player/boy_attack_left_1");
+            attackLeft2 = setup("/player/boy_attack_left_2");
+            attackRight1 = setup("/player/boy_attack_right_1");
+            attackRight2 = setup("/player/boy_attack_right_2");
+        } else  if(currentWeapon.typeOfEntity == TYPE_AXE) {
+            attackUp1 = setup("/player/boy_axe_up_1");
+            attackUp2 = setup("/player/boy_axe_up_2");
+            attackDown1 = setup("/player/boy_axe_down_1");
+            attackDown2 = setup("/player/boy_axe_down_2");
+            attackLeft1 = setup("/player/boy_axe_left_1");
+            attackLeft2 = setup("/player/boy_axe_left_2");
+            attackRight1 = setup("/player/boy_axe_right_1");
+            attackRight2 = setup("/player/boy_axe_right_2");
+        }
+
     }
 
     public void update(){
@@ -174,7 +183,16 @@ public class Player extends Entity{
 
     public void pickUpObject(int index){
         if(index != 222){
+            String text;
+            if(inventory.size() != maxInventorySize) {
+                inventory.add(gp.objectSlots[index]);
+                text = "You got a " + gp.objectSlots[index].name;
 
+            } else {
+                text = "Your inventory is full!";
+            }
+            gp.ui.addMessage(text);
+            gp.objectSlots[index] = null;
         }
     }
 
@@ -340,5 +358,28 @@ public class Player extends Entity{
 
         // reset alpha
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+    }
+
+    public void selectItem() {
+         int itemIndex = gp.ui.getItemIndexOnSlot();
+         if(itemIndex < inventory.size()) {
+             Entity selectedItem = inventory.get(itemIndex);
+
+             switch (selectedItem.typeOfEntity) {
+                 case TYPE_SWORD, TYPE_AXE:
+                     currentWeapon = selectedItem;
+                     attack = getAttack();
+                     getPlayerAttackImage();
+                     break;
+                 case TYPE_SHIELD:
+                     currentShield = selectedItem;
+                     defense = getDefense();
+                     break;
+                 case TYPE_CONSUMABLE:
+                     selectedItem.use(this);
+                     inventory.remove(itemIndex);
+                     break;
+             }
+         }
     }
 }

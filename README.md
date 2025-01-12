@@ -12,7 +12,7 @@ After completing the tutorial, i'm gonna refactor all the code, applying Object-
 - Improve Java skills.
 
 ## How to run
-1. Clone this repositor;
+1. Clone this repository;
 2. Ensure you have Java 17 or higher installed;
 3. Run the Main.java file to start the game.
 

@@ -208,7 +208,7 @@ public class Player extends Entity{
 
     public void contactMonster(int monsterIndex) {
         if(monsterIndex != 222) {
-            if(!invincible) {
+            if(!invincible && !gp.monsters[monsterIndex].dying) {
                 gp.playSoundEffect(6);
                 int damage = gp.monsters[monsterIndex].attack - defense;
                 if(damage < 0) {

@@ -270,7 +270,6 @@ public class Entity {
             changeAlpha(g2, 1f);
         }
         if(dyingCounter > 40) {
-            dying = false;
             alive = false;
         }
     }

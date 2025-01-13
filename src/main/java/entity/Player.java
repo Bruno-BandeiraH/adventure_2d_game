@@ -2,6 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
+import object.FireBallObject;
 import object.KeyObject;
 import object.ShieldObject;
 import object.SwordObject;
@@ -57,6 +58,7 @@ public class Player extends Entity{
         coin = 0;
         currentWeapon = new SwordObject(gp);
         currentShield = new ShieldObject(gp);
+        projectile = new FireBallObject(gp);
         attack = getAttack();
         defense = getDefense();
     }
@@ -172,6 +174,14 @@ public class Player extends Entity{
             }
         }
 
+        if(gp.keyH.shootKeyPressed && !projectile.alive && canShootCounter == 30) {
+            projectile.set(worldX, worldY, direction, true, this);
+
+            gp.projectiles.add(projectile);
+            canShootCounter = 0;
+            gp.playSoundEffect(9);
+        }
+
         if (invincible) {
             invincibleCounter++;
             if(invincibleCounter > 60) {
@@ -179,6 +189,10 @@ public class Player extends Entity{
                 invincibleCounter = 0;
             }
         }
+        if(canShootCounter < 30) {
+            canShootCounter++;
+        }
+
     }
 
     public void pickUpObject(int index){
@@ -208,7 +222,7 @@ public class Player extends Entity{
 
     public void contactMonster(int monsterIndex) {
         if(monsterIndex != 222) {
-            if(!invincible && !gp.monsters[monsterIndex].dying) {
+            if(!invincible) {
                 gp.playSoundEffect(6);
                 int damage = gp.monsters[monsterIndex].attack - defense;
                 if(damage < 0) {
@@ -221,7 +235,7 @@ public class Player extends Entity{
         }
     }
 
-    public void damageMonster(int monsterIndex) {
+    public void damageMonster(int monsterIndex, int attack) {
         if(monsterIndex != 222) {
             if(!gp.monsters[monsterIndex].invincible) {
                 gp.playSoundEffect(5);
@@ -297,7 +311,7 @@ public class Player extends Entity{
 
             // Check monster collision with updated worldX, worldY and solidArea
             int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
-            damageMonster(monsterIndex);
+            damageMonster(monsterIndex, attack);
 
             // restoring the position and collision values
             worldX = currentWorldX;

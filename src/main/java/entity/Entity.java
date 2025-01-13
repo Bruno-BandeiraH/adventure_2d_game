@@ -44,6 +44,8 @@ public class Entity {
     boolean hpBarOn = false;
     int hpBarCounter = 0;
     public String description = "";
+    public int canShootCounter = 0;
+
 
     public int level;
     public int strength;
@@ -55,6 +57,12 @@ public class Entity {
     public int coin;
     public Entity currentWeapon;
     public Entity currentShield;
+    public int maxMana;
+    public int currentMana;
+    public Projectile projectile;
+    public int manaCost;
+
+
 
 
     public int attackValue;

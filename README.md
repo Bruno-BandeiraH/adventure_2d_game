@@ -19,6 +19,7 @@ After completing the tutorial, i'm gonna refactor all the code, applying Object-
 ## Controls
 - Movement: W,A,S,D;
 - Action/Attack: Enter;
+- FireBall: Space bar;
 - Inventory: C
 
 ## Screenshots

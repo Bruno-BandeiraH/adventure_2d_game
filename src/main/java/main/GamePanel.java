@@ -2,6 +2,7 @@ package main;
 
 import entity.Entity;
 import entity.Player;
+import entity.Projectile;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -123,17 +124,31 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             });
 
-        IntStream.range(0, projectiles.size())
-            .forEach(i -> {
-                if(projectiles.get(i) != null) {
-                    if(projectiles.get(i).alive) {
-                        projectiles.get(i).update();
-                    }
-                    if(!projectiles.get(i).alive) {
-                        projectiles.remove(i);
-                    }
+//        IntStream.range(0, projectiles.size())
+//            .forEach(i -> {
+//                if(projectiles.get(i) != null) {
+//                    if(projectiles.get(i).alive) {
+//                        projectiles.get(i).update();
+//                    }
+//                    if(!projectiles.get(i).alive) {
+//                        projectiles.remove(i);
+//                    }
+//                }
+//            });
+
+        Iterator<Entity> iterator = projectiles.iterator();
+        while (iterator.hasNext()) {
+            Projectile projectile = (Projectile) iterator.next();
+            if (projectile != null) {
+                if (projectile.alive) {
+                    projectile.update();
                 }
-            });
+                if (!projectile.alive) {
+                    iterator.remove();
+                }
+            }
+        }
+
     }
 
     public void paintComponent(Graphics g) {

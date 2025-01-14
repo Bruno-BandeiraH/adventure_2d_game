@@ -61,6 +61,8 @@ public class Player extends Entity{
         projectile = new FireBallObject(gp);
         attack = getAttack();
         defense = getDefense();
+        maxMana = 4;
+        currentMana = maxMana;
     }
 
     public int getAttack() {
@@ -174,8 +176,10 @@ public class Player extends Entity{
             }
         }
 
-        if(gp.keyH.shootKeyPressed && !projectile.alive && canShootCounter == 30) {
+        if(gp.keyH.shootKeyPressed && !projectile.alive && canShootCounter == 30 && projectile.haveManaToCastFireBall(this)) {
             projectile.set(worldX, worldY, direction, true, this);
+
+            projectile.subtractResource(this);
 
             gp.projectiles.add(projectile);
             canShootCounter = 0;

@@ -1,5 +1,6 @@
 package object;
 
+import entity.Entity;
 import entity.Projectile;
 import main.GamePanel;
 
@@ -30,5 +31,18 @@ public class FireBallObject extends Projectile {
         left2 = setup("/fireball/fireball_left_2");
         right1 = setup("/fireball/fireball_right_1");
         right2 = setup("/fireball/fireball_right_2");
+    }
+
+    public boolean haveManaToCastFireBall(Entity user) {
+
+        boolean haveResource = false;
+        if(user.currentMana >= manaCost) {
+            haveResource = true;
+        }
+        return haveResource;
+    }
+
+    public void subtractResource(Entity user) {
+        user.currentMana -= manaCost;
     }
 }

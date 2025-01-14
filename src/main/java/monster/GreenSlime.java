@@ -2,6 +2,8 @@ package monster;
 
 import entity.Entity;
 import main.GamePanel;
+import object.FireBallObject;
+import object.RockObject;
 
 import java.util.Random;
 
@@ -20,6 +22,7 @@ public class GreenSlime extends Entity {
         attack = 5;
         defense = 0;
         exp = 3;
+        projectile = new RockObject(gp);
 
         solidArea.x = 3;
         solidArea.y = 10;
@@ -62,6 +65,13 @@ public class GreenSlime extends Entity {
                 direction = "right";
             }
             animationIntervalCounter = 0;
+        }
+
+        int i = new Random().nextInt(100)+1;
+        if(i > 99 && !projectile.alive && canShootCounter == 30) {
+            projectile.set(worldX, worldY, direction, true, this);
+            gp.projectiles.add(projectile);
+            canShootCounter = 0;
         }
     }
 

@@ -29,7 +29,7 @@ public class Projectile extends Entity {
             }
         }
         if(user != gp.player) {
-
+        
         }
         switch (direction) {
             case "up": worldY -= speed; break;

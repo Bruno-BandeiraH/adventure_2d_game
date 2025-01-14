@@ -121,16 +121,7 @@ public class Entity {
         boolean contactPlayer = gp.collisionChecker.checkPlayer(this);
 
         if(this.typeOfEntity == TYPE_MONSTER && contactPlayer) {
-            if(!gp.player.invincible) {
-                gp.playSoundEffect(6);
-
-                int damage = attack - gp.player.defense;
-                if(damage < 0) {
-                    damage = 0;
-                }
-                gp.player.currentLife -= damage;
-                gp.player.invincible = true;
-            }
+            damagePlayer(attack);
         }
 
         if(!collisionOn){
@@ -158,6 +149,22 @@ public class Entity {
                 invincible = false;
                 invincibleCounter = 0;
             }
+        }
+        if(canShootCounter < 30) {
+            canShootCounter++;
+        }
+    }
+
+    public void damagePlayer(int attack) {
+        if(!gp.player.invincible) {
+            gp.playSoundEffect(6);
+
+            int damage = attack - gp.player.defense;
+            if(damage < 0) {
+                damage = 0;
+            }
+            gp.player.currentLife -= damage;
+            gp.player.invincible = true;
         }
     }
 

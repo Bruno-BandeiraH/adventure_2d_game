@@ -3,6 +3,7 @@ package main;
 import entity.Entity;
 import entity.Player;
 import entity.Projectile;
+import interactiveTile.InteractiveTile;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -46,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable{
     public Entity[] monsters = new Entity[20];
     ArrayList<Entity> entityList = new ArrayList<>();
     public ArrayList<Entity> projectiles = new ArrayList<>();
+    public InteractiveTile[] interactiveTiles = new InteractiveTile[50];
 
 
     // GAME STATES
@@ -70,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable{
         assetSetter.setNpc();
         assetSetter.setMonsters();
         gameState = titleState;
+        assetSetter.setInteractiveTiles();
     }
 
     public void startGameThread() {
@@ -124,18 +127,6 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             });
 
-//        IntStream.range(0, projectiles.size())
-//            .forEach(i -> {
-//                if(projectiles.get(i) != null) {
-//                    if(projectiles.get(i).alive) {
-//                        projectiles.get(i).update();
-//                    }
-//                    if(!projectiles.get(i).alive) {
-//                        projectiles.remove(i);
-//                    }
-//                }
-//            });
-
         Iterator<Entity> iterator = projectiles.iterator();
         while (iterator.hasNext()) {
             Projectile projectile = (Projectile) iterator.next();
@@ -148,6 +139,10 @@ public class GamePanel extends JPanel implements Runnable{
                 }
             }
         }
+
+        Arrays.stream(interactiveTiles)
+            .filter(Objects::nonNull)
+            .forEach(InteractiveTile::update);
 
     }
 
@@ -167,6 +162,13 @@ public class GamePanel extends JPanel implements Runnable{
         } else {
             // TILE
             tileManager.draw(g2);
+
+            for(int i = 0; i < interactiveTiles.length; i++) {
+                if(interactiveTiles[i] != null) {
+                    interactiveTiles[i].draw(g2);
+                }
+            }
+
 
             // POPULATING ENTITY LIST
 

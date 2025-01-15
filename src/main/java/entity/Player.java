@@ -11,7 +11,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-
 public class Player extends Entity{
 
     KeyHandler keyH;
@@ -135,6 +134,9 @@ public class Player extends Entity{
             // check monster collision
             int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
             contactMonster(monsterIndex);
+
+            // CHECK INTERACTIVE TILES COLLISION
+            int interactiveTileIndex = gp.collisionChecker.checkEntity(this, gp.interactiveTiles);
 
             // CHECK EVENT
             gp.eventHandler.checkEvent();
@@ -317,6 +319,9 @@ public class Player extends Entity{
             int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
             damageMonster(monsterIndex, attack);
 
+            int interactveTileIndex = gp.collisionChecker.checkEntity(this,gp.interactiveTiles);
+            damageInteractiveTile(interactveTileIndex);
+
             // restoring the position and collision values
             worldX = currentWorldX;
             worldY = currentWorldY;
@@ -327,6 +332,14 @@ public class Player extends Entity{
             spriteNumber = 1;
             spriteCounter = 0;
             attacking = false;
+        }
+    }
+
+    public void damageInteractiveTile(int interactveTileIndex) {
+        if(interactveTileIndex != 222
+            && gp.interactiveTiles[interactveTileIndex].destructible
+            && gp.interactiveTiles[interactveTileIndex].isCorrectItem(this)) {
+            gp.interactiveTiles[interactveTileIndex] = null;
         }
     }
 

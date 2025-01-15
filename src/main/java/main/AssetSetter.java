@@ -1,6 +1,7 @@
 package main;
 
 import entity.OldManNPC;
+import interactiveTile.DryTreeInteractive;
 import monster.GreenSlime;
 import object.AxeObject;
 import object.BlueShieldObject;
@@ -56,5 +57,15 @@ public class AssetSetter {
         gp.monsters[1] = new GreenSlime(gp);
         gp.monsters[1].worldX = gp.tileSize*23;
         gp.monsters[1].worldY = gp.tileSize*38;
+    }
+
+    public void setInteractiveTiles() {
+        int x = 27;
+        final int y = 12;
+
+        for(int i = 0; i < 7; i++) {
+            gp.interactiveTiles[i] = new DryTreeInteractive(gp, x, y);
+            x++;
+        }
     }
 }

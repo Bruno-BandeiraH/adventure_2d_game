@@ -338,8 +338,16 @@ public class Player extends Entity{
     public void damageInteractiveTile(int interactveTileIndex) {
         if(interactveTileIndex != 222
             && gp.interactiveTiles[interactveTileIndex].destructible
-            && gp.interactiveTiles[interactveTileIndex].isCorrectItem(this)) {
-            gp.interactiveTiles[interactveTileIndex] = null;
+            && gp.interactiveTiles[interactveTileIndex].isCorrectItem(this)
+            && !gp.interactiveTiles[interactveTileIndex].invincible) {
+
+            gp.interactiveTiles[interactveTileIndex].currentLife--;
+            gp.interactiveTiles[interactveTileIndex].invincible = true;
+
+            if(gp.interactiveTiles[interactveTileIndex].currentLife == 0) {
+                gp.interactiveTiles[interactveTileIndex] = gp.interactiveTiles[interactveTileIndex].getDestroyedForm();
+            }
+
         }
     }
 

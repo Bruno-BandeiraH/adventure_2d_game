@@ -15,9 +15,15 @@ public class DryTreeInteractive extends  InteractiveTile{
 
         down1 = setup("/interactiveTiles/drytree");
         destructible = true;
+        maxLife = 3;
+        currentLife = maxLife;
     }
 
     public boolean isCorrectItem(Entity entity) {
         return entity.currentWeapon.typeOfEntity == TYPE_AXE;
+    }
+
+    public InteractiveTile getDestroyedForm() {
+        return  new TrunkInteractive(gp, worldX/gp.tileSize, worldY/gp.tileSize);
     }
 }

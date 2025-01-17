@@ -2,10 +2,7 @@ package entity;
 
 import main.GamePanel;
 import main.KeyHandler;
-import object.FireBallObject;
-import object.KeyObject;
-import object.ShieldObject;
-import object.SwordObject;
+import object.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -55,7 +52,7 @@ public class Player extends Entity{
         exp = 0;
         nextLevelExp = 5;
         coin = 0;
-        currentWeapon = new SwordObject(gp);
+        currentWeapon = new AxeObject(gp);
         currentShield = new ShieldObject(gp);
         projectile = new FireBallObject(gp);
         attack = getAttack();
@@ -343,6 +340,8 @@ public class Player extends Entity{
 
             gp.interactiveTiles[interactveTileIndex].currentLife--;
             gp.interactiveTiles[interactveTileIndex].invincible = true;
+
+            generateParticle(gp.interactiveTiles[interactveTileIndex], gp.interactiveTiles[interactveTileIndex].getDestroyedForm());
 
             if(gp.interactiveTiles[interactveTileIndex].currentLife == 0) {
                 gp.interactiveTiles[interactveTileIndex] = gp.interactiveTiles[interactveTileIndex].getDestroyedForm();

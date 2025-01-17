@@ -294,4 +294,36 @@ public class Entity {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alphaValue));
     }
 
+    public Color getParticleColor() {
+        return null;
+    }
+
+    public int getParticleSize() {
+        return 0; // pixels
+    }
+
+    public int getParticleSpeed() {
+        return 0; // how fast can fly
+    }
+
+    public int getParticleMaxLife() {
+        return 0;
+    }
+
+    public void generateParticle(Entity generator, Entity target) {
+        Color color = generator.getParticleColor();
+        int size = generator.getParticleSize();
+        int speed = generator.getParticleSpeed();
+        int maxLife = generator.getParticleMaxLife();
+
+        Particle particle = new Particle(gp, generator, color, size, speed, maxLife, -1, -1);
+        Particle particle2 = new Particle(gp, generator, color, size, speed, maxLife, 1, -1);
+        Particle particle3 = new Particle(gp, generator, color, size, speed, maxLife, -1, 1);
+        Particle particle4 = new Particle(gp, generator, color, size, speed, maxLife, 1, 1);
+        gp.particleList.add(particle);
+        gp.particleList.add(particle2);
+        gp.particleList.add(particle3);
+        gp.particleList.add(particle4);
+    }
+
 }

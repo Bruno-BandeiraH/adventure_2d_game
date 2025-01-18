@@ -200,16 +200,26 @@ public class Player extends Entity{
 
     public void pickUpObject(int index){
         if(index != 222){
-            String text;
-            if(inventory.size() != maxInventorySize) {
-                inventory.add(gp.objectSlots[index]);
-                text = "You got a " + gp.objectSlots[index].name;
 
+            // PICK UP ONLY OBJECTS
+            if(gp.objectSlots[index].typeOfEntity == TYPE_PICKUP_ONLY) {
+
+                gp.objectSlots[index].use(this);
+                gp.objectSlots[index] = null;
             } else {
-                text = "Your inventory is full!";
+                // INVENTORY ITEMS
+
+                String text;
+                if(inventory.size() != maxInventorySize) {
+                    inventory.add(gp.objectSlots[index]);
+                    text = "You got a " + gp.objectSlots[index].name;
+
+                } else {
+                    text = "Your inventory is full!";
+                }
+                gp.ui.addMessage(text);
+                gp.objectSlots[index] = null;
             }
-            gp.ui.addMessage(text);
-            gp.objectSlots[index] = null;
         }
     }
 

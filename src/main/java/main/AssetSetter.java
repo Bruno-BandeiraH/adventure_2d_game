@@ -3,10 +3,7 @@ package main;
 import entity.OldManNPC;
 import interactiveTile.DryTreeInteractive;
 import monster.GreenSlime;
-import object.AxeObject;
-import object.BlueShieldObject;
-import object.KeyObject;
-import object.PotionObject;
+import object.*;
 
 public class AssetSetter {
     GamePanel gp;
@@ -16,15 +13,15 @@ public class AssetSetter {
     }
 
     public void setObject() {
-        gp.objectSlots[0] = new KeyObject(gp);
+        gp.objectSlots[0] = new BronzeCoinObject(gp);
         gp.objectSlots[0].worldX = gp.tileSize*25;
         gp.objectSlots[0].worldY = gp.tileSize*23;
 
-        gp.objectSlots[1] = new KeyObject(gp);
+        gp.objectSlots[1] = new BronzeCoinObject(gp);
         gp.objectSlots[1].worldX = gp.tileSize*21;
         gp.objectSlots[1].worldY = gp.tileSize*19;
 
-        gp.objectSlots[2] = new KeyObject(gp);
+        gp.objectSlots[2] = new BronzeCoinObject(gp);
         gp.objectSlots[2].worldX = gp.tileSize*26;
         gp.objectSlots[2].worldY = gp.tileSize*21;
 

@@ -29,7 +29,8 @@ public class Entity {
     public int invincibleCounter = 0;
     public int typeOfEntity; // 0 = player, 1 = NPC, 2 = monster
     public final int TYPE_PLAYER = 0;
-    public final int TYPE_NPCR = 1;
+    public final int TYPE_NPC = 1;
+    public final int TYPE_PICKUP_ONLY = 1;
     public final int TYPE_MONSTER = 2;
     public final int TYPE_SWORD = 3;
     public final int TYPE_AXE = 4;
@@ -153,6 +154,21 @@ public class Entity {
         }
         if(canShootCounter < 30) {
             canShootCounter++;
+        }
+    }
+
+    public void checkDrop() {
+
+    }
+
+    public void dropItem(Entity droppedItem) {
+        for(int i = 0; i < gp.objectSlots.length; i++) {
+            if(gp.objectSlots[i] == null) {
+                gp.objectSlots[i] = droppedItem;
+                gp.objectSlots[i].worldX = worldX;
+                gp.objectSlots[i].worldY = worldY;
+                break;
+            }
         }
     }
 

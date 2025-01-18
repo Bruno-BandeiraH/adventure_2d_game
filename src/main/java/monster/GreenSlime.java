@@ -2,7 +2,7 @@ package monster;
 
 import entity.Entity;
 import main.GamePanel;
-import object.FireBallObject;
+import object.BronzeCoinObject;
 import object.RockObject;
 
 import java.util.Random;
@@ -78,5 +78,13 @@ public class GreenSlime extends Entity {
     public void damageReaction() {
         animationIntervalCounter = 0;
         direction = gp.player.direction;
+    }
+
+    public void checkDrop() {
+        int i = new Random().nextInt(100) + 1;
+
+        if(i < 70) {
+            dropItem(new BronzeCoinObject(gp));
+        }
     }
 }

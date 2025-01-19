@@ -8,6 +8,7 @@ import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -18,10 +19,15 @@ public class GamePanel extends JPanel implements Runnable{
     public final int originalTileSize = 16; // 16x16 tile
     final int scale = 3; // scaling
     public final int tileSize = originalTileSize * scale; // 48x48
-    public final int maxTileCol = 16; // making a
+    public final int maxTileCol = 20; // making a
     public final int maxTileRow = 12; // 4:3 aspect ratio
-    public final int screenWidth = tileSize * maxTileCol; // 768 pixels
+    public final int screenWidth = tileSize * maxTileCol; // 960 pixels
     public final int screenHeight = tileSize * maxTileRow; // 576 pixels
+    int fullScreenWidth = screenWidth;
+    int fullScreenHeight = screenHeight;
+    BufferedImage temporaryScreen;
+    Graphics2D g2;
+
 
     // WORLD MAP SIZE SETTINGS
     public final int maxWorldCol = 50;
@@ -75,6 +81,10 @@ public class GamePanel extends JPanel implements Runnable{
         assetSetter.setMonsters();
         gameState = titleState;
         assetSetter.setInteractiveTiles();
+
+        temporaryScreen = new BufferedImage(screenWidth, screenHeight, BufferedImage.TYPE_INT_ARGB);
+        g2 = (Graphics2D) temporaryScreen.getGraphics();
+        setFullScreen();
     }
 
     public void startGameThread() {
@@ -94,7 +104,9 @@ public class GamePanel extends JPanel implements Runnable{
             // 1  UPDATE: update information such as character positions, tiles, objects, npc's
             update();
             // 2 DRAW: draw the screen with the updated information
-            repaint();
+            //repaint();
+            drawToTemporaryScreen(); // draw everything to the buffered image
+            drawToScreen(); // draw the buffered image to the screen
             try{
                 double remainingTime = nextDrawTime - System.nanoTime();
                 remainingTime = remainingTime/1000000;
@@ -107,6 +119,18 @@ public class GamePanel extends JPanel implements Runnable{
                 e.getMessage();
             }
         }
+    }
+
+    public void setFullScreen() {
+        // get local screen device
+        GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice graphicsDevice = graphicsEnvironment.getDefaultScreenDevice();
+        graphicsDevice.setFullScreenWindow(Main.window);
+
+        // GET FULL SCREEN WIDTH AND HEIGHT
+        fullScreenWidth = Main.window.getWidth();
+        fullScreenHeight = Main.window.getHeight();
+
     }
 
     public void update() {
@@ -160,10 +184,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     }
 
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g); // this Graphics class is like a brush that will paint the game on the screen for us
-        Graphics2D g2 = (Graphics2D) g; // this is a class for better control in 2D games
-
+    public void drawToTemporaryScreen() {
         // time stamp
         long drawStart = 0;
         if(keyH.showDebugText){
@@ -190,14 +211,14 @@ public class GamePanel extends JPanel implements Runnable{
 
             Arrays.stream(npc) // NPC
                 .filter(Objects::nonNull)
-                    .forEach(entityList::add);
+                .forEach(entityList::add);
 
             Arrays.stream(objectSlots) // OBJECTS
                 .filter(Objects::nonNull)
-                    .forEach(entityList::add);
+                .forEach(entityList::add);
 
             Arrays.stream(monsters)
-                    .filter(Objects::nonNull)
+                .filter(Objects::nonNull)
                 .forEach(entityList::add);
 
             projectiles.stream()
@@ -244,7 +265,12 @@ public class GamePanel extends JPanel implements Runnable{
             g2.drawString("Draw time: " + passedTime, x, y);
             System.out.println("Draw time: " + passedTime);
         }
-        g2.dispose(); // helps to release resources after drawing
+    }
+
+    public void drawToScreen() {
+        Graphics g = getGraphics();
+        g.drawImage(temporaryScreen, 0, 0, fullScreenWidth, fullScreenHeight, null);
+        g.dispose();
     }
 
     public void playMusic(int i) {

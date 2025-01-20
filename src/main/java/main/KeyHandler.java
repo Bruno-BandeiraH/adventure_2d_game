@@ -36,6 +36,9 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.characterState) {
             characterState(code);
         }
+        else if (gp.gameState == gp.optionsState) {
+            optionsState(code);
+        }
     }
 
     public void titleState(int code) {
@@ -57,10 +60,58 @@ public class KeyHandler implements KeyListener {
             switch (gp.ui.commandNumber) {
                 case 0:
                     gp.gameState = gp.playState;
+                    gp.playMusic(0);
                     break;
                 case 2:
                     System.exit(0);
                     break;
+            }
+        }
+    }
+
+    public void optionsState(int code) {
+        if(code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.playState;
+        }
+        if(code == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+        }
+
+        if (code == KeyEvent.VK_W) {
+            if(gp.ui.commandNumber == 0) {
+                gp.ui.commandNumber = 5;
+            } else {
+                gp.ui.commandNumber--;
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            if(gp.ui.commandNumber == 5) {
+                gp.ui.commandNumber = 0;
+            } else {
+                gp.ui.commandNumber++;
+            }
+        }
+
+        if(code == KeyEvent.VK_A) {
+            if(gp.ui.subState == 0) {
+                if (gp.ui.commandNumber == 1 && gp.music.volumeScale > 0) {
+                    gp.music.volumeScale--;
+                    gp.music.checkVolume();
+                }
+                if (gp.ui.commandNumber == 2 && gp.soundEffect.volumeScale > 0) {
+                    gp.soundEffect.volumeScale--;
+                }
+            }
+        }
+        if(code == KeyEvent.VK_D) {
+            if(gp.ui.subState == 0) {
+                if (gp.ui.commandNumber == 1 && gp.music.volumeScale < 5) {
+                    gp.music.volumeScale++;
+                    gp.music.checkVolume();
+                }
+                if (gp.ui.commandNumber == 2 && gp.soundEffect.volumeScale < 5) {
+                    gp.soundEffect.volumeScale++;
+                }
             }
         }
     }
@@ -90,6 +141,10 @@ public class KeyHandler implements KeyListener {
         if (code == KeyEvent.VK_SPACE) {
             shootKeyPressed = true;
         }
+        if(code == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.optionsState;
+        }
+
 
         // TIMER
         if (code == KeyEvent.VK_T) {

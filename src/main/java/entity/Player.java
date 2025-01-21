@@ -31,13 +31,13 @@ public class Player extends Entity{
         solidAreaDefaultX = solidArea.x;
         solidAreaDefaultY = solidArea.y;
 
-        setDefalutValues();
+        setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
         setItems();
     }
 
-    public void setDefalutValues(){
+    public void setDefaultValues(){
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 21;
         speed = 4;
@@ -59,6 +59,18 @@ public class Player extends Entity{
         defense = getDefense();
         maxMana = 4;
         currentMana = maxMana;
+    }
+
+    public void setDefaultPositions() {
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 21;
+        direction = "down";
+    }
+
+    public void restoreLifeAndMana() {
+        currentLife = maxLife;
+        currentMana = maxMana;
+        invincible = false;
     }
 
     public int getAttack() {
@@ -196,6 +208,10 @@ public class Player extends Entity{
             canShootCounter++;
         }
 
+        if(currentLife <= 0) {
+            gp.gameState = gp.gameOverState;
+        }
+
     }
 
     public void pickUpObject(int index){
@@ -290,6 +306,7 @@ public class Player extends Entity{
     }
 
     public void setItems() {
+        inventory.clear();
         inventory.add(currentWeapon);
         inventory.add(currentShield);
         inventory.add(new KeyObject(gp));

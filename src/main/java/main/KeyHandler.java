@@ -39,6 +39,39 @@ public class KeyHandler implements KeyListener {
         else if (gp.gameState == gp.optionsState) {
             optionsState(code);
         }
+        else if (gp.gameState == gp.gameOverState) {
+            gameOverState(code);
+        }
+    }
+
+    public void gameOverState(int code) {
+        if (code == KeyEvent.VK_W) {
+            if(gp.ui.commandNumber == 0) {
+                gp.ui.commandNumber = 1;
+            } else {
+                gp.ui.commandNumber--;
+            }
+        }
+        if (code == KeyEvent.VK_S) {
+            if(gp.ui.commandNumber == 1) {
+                gp.ui.commandNumber = 0;
+            } else {
+                gp.ui.commandNumber++;
+            }
+        }
+        if(code == KeyEvent.VK_ENTER) {
+            switch (gp.ui.commandNumber) {
+                case 0:
+                    gp.retry();
+                    gp.gameState = gp.playState;
+                    break;
+                case 1:
+                    gp.restart();
+                    gp.stopMusic();
+                    gp.gameState = gp.titleState;
+                    break;
+            }
+        }
     }
 
     public void titleState(int code) {

@@ -67,6 +67,7 @@ public class GamePanel extends JPanel implements Runnable{
     public final int dialogueState = 3;
     public final int characterState = 4;
     public final int optionsState = 5;
+    public final int gameOverState = 6;
 
     // METHODS
 
@@ -92,6 +93,22 @@ public class GamePanel extends JPanel implements Runnable{
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void retry() {
+        player.restoreLifeAndMana();
+        player.setDefaultPositions();
+        assetSetter.setMonsters();
+        assetSetter.setNpc();
+    }
+
+    public void restart() {
+        player.setDefaultValues();
+        player.setItems();
+        assetSetter.setObject();
+        assetSetter.setNpc();
+        assetSetter.setMonsters();
+        assetSetter.setInteractiveTiles();
     }
 
     // GAME LOOP
